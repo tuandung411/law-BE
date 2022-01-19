@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
+
 const cors = require("cors");
 var multipart = require("connect-multiparty");
 const { pageNotFound, errorHandle } = require("./midlewares/errorHandle");
@@ -10,7 +11,7 @@ const route = require("./routes");
 
 const app = express();
 
-var multipartMiddleware = multipart({ uploadDir: "./public/images" });
+// var multipartMiddleware = multipart({ uploadDir: "./public/images" });
 
 app.use(express.static("public"));
 
@@ -37,9 +38,9 @@ const isLive = (req, res) => {
 app.get("/", isLive);
 
 // Upload images from ckeditor
-app.post("/upload", multipartMiddleware, (req, res) => {
-    console.log(req.files);
-});
+// app.post("/upload", multipartMiddleware, (req, res) => {
+//     console.log(req.files);
+// });
 
 route(app);
 
