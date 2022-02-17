@@ -14,7 +14,7 @@ const login = async ({ username, password }) => {
         };
     }
     console.log(user);
-    const passwordValid = await argon2.verify(user.MatKhau, password);
+    const passwordValid = await argon2.verify(user.matKhau, password);
     if (!passwordValid) {
         return {
             status: 401,
@@ -56,12 +56,14 @@ const register = async ({
         }
 
         const hashedPassword = await argon2.hash(password);
-        const sqlCreate = `insert into user(TaiKhoan,MatKhau,Ten,SDT) VALUES(?,?,?,?)`;
+        const sqlCreate = `insert into user(TaiKhoan,MatKhau,Ten,SDT,diaChi,email) VALUES(?,?,?,?,?,?)`;
         const newUser = await db.queryOne(sqlCreate, [
             username,
             [hashedPassword],
             name,
             phoneNumber,
+            address,
+            email,
         ]);
         // const accessToken = jwt.sign(
         //     { userId: user.name },
