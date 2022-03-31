@@ -25,7 +25,7 @@ var corsOptions = {
     origin: "*",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
-    optionsSuccessStatus: 200,
+    optionsSuccessStatus: 200, // default status = 200, on some browser successful status = 204
     exposedHeaders: "Content-Range",
 };
 

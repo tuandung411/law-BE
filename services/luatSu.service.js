@@ -2,7 +2,7 @@ const db = require("../utils/db");
 // const codeService = require('./code.service');
 
 const getList = async () => {
-    const sql = `select * from luatsu `;
+    const sql = `select * from luatsu`;
     const data = await db.query(sql);
     // console.log(data);
     return data;
@@ -28,8 +28,82 @@ const getLinhVuc = async (id) => {
     console.log(data);
     return data;
 };
+const getLuatsuTheoLinhvuc = async (id) => {
+    const sql = `SELECT * FROM luatsu inner join luatsu_linhvuc on luatsu.ID=luatsu_linhvuc.ID_luatSu where luatsu_linhvuc.ID_linhVuc=?;`;
+    const data = await db.query(sql, [id]);
+    console.log("list ne", data);
+    return data;
+};
+const getTrinhdo = async (id) => {
+    const sql = `SELECT * FROM (luatsu_trinhdo inner join luatsu on luatsu_trinhdo.ID_luatsu=luatsu.ID) where luatsu.ID=?`;
+    const listTrinhdo = await db.query(sql, [id]);
+
+    const data = listTrinhdo.map((x) => x.trinhdo);
+    console.log(data);
+    return data;
+};
+const postDanhgia = async (idUser, idLuatsu, content) => {
+    const sql = `INSERT into danhgia(maKH,maLS,noidung) values(?,?,?)`;
+
+    const data = await db.query(sql, [idUser, idLuatsu, content]);
+
+    return data;
+};
+const create = async (params) => {
+    const { name, address, phone, content, email, law, id, year, avt } = params;
+    const sql1 = `insert into luatsu(ten,namSinh,sdt,diaChi,email,gioiThieu) values(?,?,?,?,?,?)`;
+    const sql2 = `SELECT * FROM luatsu ORDER BY ID DESC LIMIT 1`;
+    const sql3 = `INSERT into luatsu_linhvuc(ID_luatsu,ID_linhvuc) values(?,?)`;
+    const exe1 = await db.query(sql1, [
+        name,
+        year,
+        phone,
+        address,
+        email,
+        content,
+    ]);
+    const ID = await db.query(sql2);
+    const exe3 = law.forEach(async (item, index) => {
+        const execute = await db.query(sql3, [ID, item]);
+    });
+    const data = { exe1, exe3 };
+    return data;
+};
+const updateInfo = async (params) => {
+    const { name, address, phone, content, mail, law, id } = params;
+    const sql1 = `UPDATE luatsu set ten= ?,diaChi= ?,sdt=?,email=?,gioiThieu=? where ID = ?  `;
+    const sql2 = `DELETE from luatsu_linhvuc where ID_luatsu = ?`;
+    const sql3 = `INSERT into luatsu_linhvuc(ID_luatsu,ID_linhvuc) values(?,?)`;
+    const exe1 = await db.query(sql1, [
+        name,
+        address,
+        phone,
+        mail,
+        content,
+        id,
+    ]);
+    const exe2 = await db.query(sql2, [id]);
+    const length = law.length;
+    const exe3 = law.forEach(async (item, index) => {
+        const execute = await db.query(sql3, [id, item]);
+    });
+    const data = { exe1, exe2, exe3 };
+    return data;
+};
+const remove = async (params) => {
+    const { id } = params;
+    const sql = `DELETE from luatsu where ID=?`;
+    const data = await db.queryOne(sql, [id]);
+    return data;
+};
 module.exports = {
     getList,
     getInfo,
     getLinhVuc,
+    getLuatsuTheoLinhvuc,
+    getTrinhdo,
+    postDanhgia,
+    updateInfo,
+    create,
+    remove,
 };

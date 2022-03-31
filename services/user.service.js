@@ -1,9 +1,18 @@
 const db = require("../utils/db");
 // const codeService = require('./code.service');
 
-const getInfo = async ({ username }) => {
-    const sql = `select Email, NgaySinh, SDT, Ten from User where TaiKhoan = ?`;
-    const data = await db.queryOne(sql, [username]);
+const getList = async () => {
+    const sql = "SELECT * from user";
+    const data = await db.query(sql);
+    console.log(data);
+    return data;
+};
+const getUser = async (params) => {
+    const { id } = params;
+    const sql = `select * from user where ID = ?`;
+    const exe = await db.query(sql, [id]);
+    const data = exe[0];
+    console.log(data);
     return data;
 };
 
@@ -54,12 +63,6 @@ const create = async ({
     };
 };
 
-const update = async ({ Ten, SDT, NgaySinh, Email }, username) => {
-    const sql = `update User set Ten = ?, SDT = ?, NgaySinh = ?, Email = ? where TaiKhoan = ? `;
-    await db.queryOne(sql, [Ten, SDT, NgaySinh, Email, username]);
-    return "upate User successfully";
-};
-
 const changPassword = async (
     { oldPassword, newPassword, reNewPassword },
     { username }
@@ -82,8 +85,9 @@ const changPassword = async (
 };
 
 module.exports = {
-    getInfo,
+    getList,
+    getUser,
     create,
-    update,
+
     changPassword,
 };
