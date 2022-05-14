@@ -12,8 +12,14 @@ const checkFile = (req, res, next) => {
     } else {
         var addTail;
         const extension = req.file.mimetype.split("/").slice(1);
+        console.log(extension);
         if (extension == "msword" || extension == "word") {
             addTail = req.file.path.concat(".", "doc");
+        } else if (
+            extension ==
+            "vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ) {
+            addTail = req.file.path.concat(".", "docx");
         } else {
             addTail = req.file.path.concat(".", extension);
         }
@@ -26,6 +32,8 @@ const checkFile = (req, res, next) => {
             // console.log(req.body.file, "file");
             next();
         });
+        // addTail là tên mới
+        // req.file.path là url cần rename
     }
 };
 

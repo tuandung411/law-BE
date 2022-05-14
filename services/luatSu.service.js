@@ -4,7 +4,19 @@ const db = require("../utils/db");
 const getList = async () => {
     const sql = `select * from luatsu`;
     const data = await db.query(sql);
-    // console.log(data);
+
+    return data;
+};
+const getList2 = async (params) => {
+    const { listID } = params;
+    var data = [];
+    const sql = `select * from luatsu where ID=?`;
+
+    for (var ID of listID) {
+        var result = await db.queryOne(sql, [ID]);
+        data = [...data, result];
+    }
+
     return data;
 };
 const getInfo = async (id) => {
@@ -25,13 +37,21 @@ const getLinhVuc = async (id) => {
     //     console.log(tenLV);
     // });
     const data = listLinhVuc.map((x) => x.tenLV);
-    console.log(data);
+    // console.log(data);
     return data;
 };
 const getLuatsuTheoLinhvuc = async (id) => {
-    const sql = `SELECT * FROM luatsu inner join luatsu_linhvuc on luatsu.ID=luatsu_linhvuc.ID_luatSu where luatsu_linhvuc.ID_linhVuc=?;`;
+    console.log("id", id);
+    const sql = `SELECT * FROM ((luatsu inner join luatsu_linhvuc on luatsu.ID=luatsu_linhvuc.ID_luatSu) inner join linhvuc on linhvuc.ID= luatsu_linhvuc.ID_linhvuc) where linhvuc.tenLV=?;`;
     const data = await db.query(sql, [id]);
-    console.log("list ne", data);
+    // console.log("list ne", data);
+    return data;
+};
+const getLuatsuTheoIdLinhvuc = async (id) => {
+    console.log("id", id);
+    const sql = `SELECT * FROM ((luatsu inner join luatsu_linhvuc on luatsu.ID=luatsu_linhvuc.ID_luatSu) inner join linhvuc on linhvuc.ID= luatsu_linhvuc.ID_linhvuc) where linhvuc.ID=?;`;
+    const data = await db.query(sql, [id]);
+    // console.log("list ne", data);
     return data;
 };
 const getTrinhdo = async (id) => {
@@ -43,9 +63,10 @@ const getTrinhdo = async (id) => {
     return data;
 };
 const postDanhgia = async (idUser, idLuatsu, content) => {
-    const sql = `INSERT into danhgia(maKH,maLS,noidung) values(?,?,?)`;
+    var date = "06/04/2022";
+    const sql = `INSERT into danhgia(maKH,maLS,noidung,ngaytao) values(?,?,?,?)`;
 
-    const data = await db.query(sql, [idUser, idLuatsu, content]);
+    const data = await db.query(sql, [idUser, idLuatsu, content, date]);
 
     return data;
 };
@@ -98,9 +119,11 @@ const remove = async (params) => {
 };
 module.exports = {
     getList,
+    getList2,
     getInfo,
     getLinhVuc,
     getLuatsuTheoLinhvuc,
+    getLuatsuTheoIdLinhvuc,
     getTrinhdo,
     postDanhgia,
     updateInfo,

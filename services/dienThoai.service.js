@@ -1,7 +1,7 @@
 const db = require("../utils/db");
 // const codeService = require('./code.service');
 
-const dangKi = async ({ userID, maDV }) => {
+const dangKi = async ({ userID, maDV, date }) => {
     var gia;
     switch (maDV) {
         case 1:
@@ -13,9 +13,12 @@ const dangKi = async ({ userID, maDV }) => {
         case 3:
             gia = "800.000đ";
             break;
+        default:
+            gia = "200.000đ";
+            break;
     }
-    const sql = `insert tuvandienthoai(gia,maKH,tinhtrang) values(?,?,0) `;
-    const data = await db.query(sql, [gia, userID]);
+    const sql = `insert tuvandienthoai(gia,maKH,ngaytao,tinhtrang) values(?,?,?,0) `;
+    const data = await db.query(sql, [gia, userID, date]);
 
     return data;
 };
@@ -99,10 +102,19 @@ const update = async (params) => {
     }
     return data;
 };
+const remove = async (params) => {
+    const { id } = params;
+    const sql = `DELETE from tuvandienthoai where ID= ? `;
+
+    const data = await db.query(sql, [id]);
+    // console.log(data);
+    return data;
+};
 
 module.exports = {
     dangKi,
     getList,
     getInfo,
     update,
+    remove,
 };

@@ -4,6 +4,10 @@ const getList = async (req, res) => {
     const data = await luatSuService.getList();
     res.send(data);
 };
+const getList2 = async (req, res) => {
+    const data = await luatSuService.getList2(req.body);
+    res.send(data);
+};
 const getInfo = async (req, res) => {
     const { id } = req.body;
     const data = await luatSuService.getInfo(id);
@@ -19,6 +23,11 @@ const getLinhVuc = async (req, res) => {
 const getLuatsuTheoLinhvuc = async (req, res) => {
     const { id } = req.body;
     const data = await luatSuService.getLuatsuTheoLinhvuc(id);
+    res.send(data);
+};
+const getLuatsuTheoIdLinhvuc = async (req, res) => {
+    const { id } = req.body;
+    const data = await luatSuService.getLuatsuTheoIdLinhvuc(id);
     res.send(data);
 };
 const getTrinhdo = async (req, res) => {
@@ -45,9 +54,11 @@ const remove = async (req, res) => {
 };
 module.exports = {
     getList,
+    getList2,
     getInfo,
     getLinhVuc,
     getLuatsuTheoLinhvuc,
+    getLuatsuTheoIdLinhvuc,
     getTrinhdo,
     postDanhgia,
     updateInfo,

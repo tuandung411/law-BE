@@ -96,15 +96,14 @@ const register = async ({
             address,
             email,
         ]);
+
         // const accessToken = jwt.sign(
         //     { userId: user.name },
         //     process.env.ACCESS_TOKEN_SECRET
         // );
         return {
             status: 200,
-            data: "success",
-            // token: accessToken,
-            user: user,
+            data: { user: newUser },
         };
     } catch (error) {
         console.log(error);

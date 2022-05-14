@@ -7,5 +7,5 @@ Route.post("/dangKi", tryCatch(controller.dangKi));
 Route.post("/getList", tryCatch(controller.getList));
 Route.post("/getInfo", tryCatch(controller.getInfo));
 Route.post("/update", tryCatch(controller.update));
-
+Route.post("/remove", tryCatch(controller.remove));
 module.exports = Route;

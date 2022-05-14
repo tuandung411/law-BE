@@ -1,7 +1,8 @@
 const db = require("../utils/db");
 
-const dangKi = async ({ userID, law, email, content, price, file }) => {
-    const sql = `insert tuvanemail(maKH,linhvuc,email,noidung,gia,file,tinhTrang) values(?,?,?,?,?,?,0) `;
+const dangKi = async ({ userID, law, email, content, price, file, date }) => {
+    console.log(date);
+    const sql = `insert tuvanemail(maKH,linhvuc,email,noidung,gia,file,ngaytao,tinhTrang) values(?,?,?,?,?,?,?,0) `;
     if (price === "1") {
         price = "300.000đ";
     } else if (price === "2") {
@@ -16,7 +17,38 @@ const dangKi = async ({ userID, law, email, content, price, file }) => {
         content,
         price,
         file,
+        date,
     ]);
+    // console.log(data);
+    return data;
+};
+const dangKi2 = async ({ userID, law, mail, content, price, date }) => {
+    console.log(mail);
+    const sql = `insert tuvanemail(maKH,linhvuc,email,noidung,gia,ngaytao,tinhTrang) values(?,?,?,?,?,?,0) `;
+    if (price === "1" || price === 1) {
+        price = "300.000đ";
+    } else if (price === "2" || price === 2) {
+        price = "500.000đ";
+    } else if (price === "3" || price === 3) {
+        price = "800.000đ";
+    }
+    if (law === 1) {
+        law = "Dân sư";
+    } else if (law === 2) {
+        law = "Hình sự";
+    } else if (law === 3) {
+        law = "Hôn nhân và gia đình";
+    } else if (law === 4) {
+        law = "Kinh tế";
+    } else if (law === 5) {
+        law = "Hành chính";
+    } else if (law === 6) {
+        law = "Đất đai";
+    } else if (law === 7) {
+        law = "Tài chính";
+    }
+
+    const data = await db.query(sql, [userID, law, mail, content, price, date]);
     // console.log(data);
     return data;
 };
@@ -89,10 +121,20 @@ const update = async (params) => {
 
     return data;
 };
+const remove = async (params) => {
+    const { id } = params;
+    const sql = `DELETE from tuvanemail where ID= ? `;
+
+    const data = await db.query(sql, [id]);
+    // console.log(data);
+    return data;
+};
 
 module.exports = {
     dangKi,
+    dangKi2,
     getList,
     getInfo,
     update,
+    remove,
 };
